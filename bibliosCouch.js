@@ -1,5 +1,36 @@
 var couchcgiurl = '/cgi-bin/couchProxy.py';
 var couchserverurl = $('couchserverurl', configDoc).text();
+var couchDbStore = '';
+$.getScript('plugins/bibliosCouch/Extjs-couchdb.js',
+  function(data) {
+    couchDbStore = new Ext.ux.data.CouchStore({
+    db:    'biblios',
+    view:  'records/all',
+    url: '/couchdb/biblios/_view/records/all',
+    fields: [
+        {name: '_id'        },  // I'd love to get rid of this as well
+        {name: '_rev'       },  // ditto
+        {name: 'title'   },
+        {name: 'author'   },
+        {name: 'publisher'},
+        {name: 'xml'},
+          {
+            name: 'dateofpub'
+          },
+      {
+        name: 'xmlformat'
+      },
+      {
+        name: 'location'
+      },
+      {
+        name: 'medium'
+      }
+    ]
+  }); // CouchStore def
+    couchDbStore.load({});
+  } // getScript handler
+  );
 
 function sendToCouch(records) {
 
