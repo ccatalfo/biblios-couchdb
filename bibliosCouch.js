@@ -28,6 +28,46 @@ $.getScript('plugins/bibliosCouch/Extjs-couchdb.js',
       }
     ]
   }); // CouchStore def
+var bibliosCouchGrid =
+  new Ext.grid.GridPanel({
+    id: 'couchgrid'
+    ,height:300
+    ,region:'center'
+    ,store: couchDbStore
+    ,columns: [
+    {
+      header:'Title'
+      ,dataIndex:'title'
+    }
+    ,{
+      header:'Author'
+      ,dataIndex:'author'
+    }
+    ,{
+      header:'Publisher'
+      ,dataIndex:'publisher'
+    }
+    ,{
+      header:'Date'
+      ,dataIndex:'date'
+    }
+    ,{
+      header:'Medium'
+      ,dataIndex:'medium'
+    }
+    ,{
+      header:'Format'
+      ,dataIndex:'xmlformat'
+    }
+    ,{
+      header:'Location'
+      ,dataIndex:'location'
+    }
+    ]
+  ,sm: new Ext.grid.RowSelectionModel()
+  });
+Ext.getCmp('bibliocenter').items.add(bibliosCouchGrid);
+biblios.app.on('updatesendmenu', addCouchToSendMenu);
     couchDbStore.load({});
   } // getScript handler
   );
@@ -108,6 +148,11 @@ Ext.getCmp('resourcesPanel').items.get(0).items.add(
     ,root: new Ext.tree.AsyncTreeNode({
       text:'Couchdb'
       ,leaf:true
+      ,listeners: {
+        click: function(n,e) {
+          Ext.getCmp('bibliocenter').layout.setActiveItem(4);
+        }
+      }
       ,loader: new Ext.tree.TreeLoader({
 
         }) //couchdb loader
@@ -116,4 +161,3 @@ Ext.getCmp('resourcesPanel').items.get(0).items.add(
 );
 Ext.getCmp('resourcesPanel').doLayout();
 
-biblios.app.on('updatesendmenu', addCouchToSendMenu);
