@@ -179,9 +179,8 @@ var couchcgiurl = '/cgi-bin/couchProxy.py';
 var couchserverurl = $('couchserverurl', configDoc).text();
 
 var couchDbStore = new Ext.ux.data.CouchStore({
-    db:    'biblios',
+    db:    'couchdb/biblios',
     view:  'records/all',
-    url: '/couchdb/biblios/_view/records/all',
     fields: [
         {name: '_id'        },  // I'd love to get rid of this as well
         {name: '_rev'       },  // ditto
@@ -240,7 +239,23 @@ var bibliosCouchGrid =
     }
     ]
   ,sm: new Ext.grid.RowSelectionModel()
-  });
+  ,tbar: new Ext.PagingToolbar({
+    id: 'couchTbar'
+    ,store: couchDbStore
+    ,displayInfo: true
+    ,items: [
+    {
+      text: 'Delete'
+      ,handler: function(btn) {
+        var selected = bibliosCouchGrid.getSelections();
+        for( var i = 0; i < selected.length; i++) {
+          couchDbStore.remove(selected[i]);
+        }
+      }
+    }
+    ]
+  })
+});
 Ext.getCmp('bibliocenter').items.add(bibliosCouchGrid);
 biblios.app.on('updatesendmenu', addCouchToSendMenu);
 couchDbStore.load({});
