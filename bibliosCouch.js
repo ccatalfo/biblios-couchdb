@@ -1,6 +1,7 @@
 var couchcgiurl = '/cgi-bin/couchProxy.py';
 var couchserverurl = $('couchserverurl', configDoc).text();
 var couchDbStore = '';
+var bibliosCouchGrid = '';
 $.getScript('plugins/bibliosCouch/Extjs-couchdb.js',
   function(data) {
     couchDbStore = new Ext.ux.data.CouchStore({
@@ -28,7 +29,7 @@ $.getScript('plugins/bibliosCouch/Extjs-couchdb.js',
       }
     ]
   }); // CouchStore def
-var bibliosCouchGrid =
+bibliosCouchGrid =
   new Ext.grid.GridPanel({
     id: 'couchgrid'
     ,height:300
@@ -148,8 +149,10 @@ Ext.getCmp('resourcesPanel').items.get(0).items.add(
     ,root: new Ext.tree.AsyncTreeNode({
       text:'Couchdb'
       ,leaf:true
+      ,icon: libPath + 'lib/extjs2/resources/images/default/tree/folder-open.gif'
       ,listeners: {
         click: function(n,e) {
+          couchDbStore.load({});
           Ext.getCmp('bibliocenter').layout.setActiveItem(4);
         }
       }
