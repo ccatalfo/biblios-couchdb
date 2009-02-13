@@ -208,36 +208,37 @@ var bibliosCouchGrid =
     ,height:300
     ,region:'center'
     ,store: couchDbStore
-    ,columns: [
-    {
-      header:'Title'
-      ,dataIndex:'title'
-    }
-    ,{
-      header:'Author'
-      ,dataIndex:'author'
-    }
-    ,{
-      header:'Publisher'
-      ,dataIndex:'publisher'
-    }
-    ,{
-      header:'Date'
-      ,dataIndex:'date'
-    }
-    ,{
-      header:'Medium'
-      ,dataIndex:'medium'
-    }
-    ,{
-      header:'Format'
-      ,dataIndex:'xmlformat'
-    }
-    ,{
-      header:'Location'
-      ,dataIndex:'location'
-    }
-    ]
+    ,columns:
+      [
+        {
+          header:'Title'
+          ,dataIndex:'title'
+        }
+        ,{
+          header:'Author'
+          ,dataIndex:'author'
+        }
+        ,{
+          header:'Publisher'
+          ,dataIndex:'publisher'
+        }
+        ,{
+          header:'Date'
+          ,dataIndex:'date'
+        }
+        ,{
+          header:'Medium'
+          ,dataIndex:'medium'
+        }
+        ,{
+          header:'Format'
+          ,dataIndex:'xmlformat'
+        }
+        ,{
+          header:'Location'
+          ,dataIndex:'location'
+        }
+      ]
   ,sm: new Ext.grid.RowSelectionModel()
   ,tbar: new Ext.PagingToolbar({
     id: 'couchTbar'
@@ -253,7 +254,46 @@ var bibliosCouchGrid =
         }
       }
     }
-    ]
+    ,{
+      text: 'Save to Folder'
+      ,menu: {
+        id: 'couchSaveMenu'
+        ,items: []
+        ,listeners: {
+          beforeshow: function(menu, menuItem, e) {
+            menu.removeAll();
+            var savefiles = getSaveFileNames();
+            for(var i = 0; i< savefiles.length; i++) {
+              menu.add({
+                text: savefiles[i].name
+                ,savefileid:savefiles[i].id
+                ,handler: function(btn){
+                  var records = bibliosCouchGrid.getSelections();
+                  for(var i = 0; i < records.length; i++) {
+                    if(bibliosdebug) {
+                      console.info('saving ' +records[i].data.title);
+                    }
+                    showStatusMsg('Saving ' + records[i].data.title);
+                    var record = new DB.Records({
+                      title : records[i].data.title
+                      ,author: records[i].data.author
+                      ,publisher: records[i].data.publisher
+                      ,date:records[i].data.date
+                      ,xml:records[i].data.xml
+                      ,medium:records[i].data.medium
+                      ,location:'couchdb'
+                      ,Savefiles_id:btn.savefileid
+                    }).save();
+                    clearStatusMsg();
+                  }
+                }
+              });
+            }
+          }
+        } // couchSaveMenu listeners
+      } // couchSaveMenu
+    } // saveToFolder
+  ] // couchTbar items
   })
 });
 Ext.getCmp('bibliocenter').items.add(bibliosCouchGrid);
@@ -262,7 +302,7 @@ couchDbStore.load({});
 
 function sendToCouch(records) {
 
-  $.ajax({
+/*  $.ajax({
     url: couchcgiurl
     ,type:'POST'
     ,data: {
@@ -270,7 +310,10 @@ function sendToCouch(records) {
       ,serverurl: couchserverurl
     }
   });
-
+*/
+  for(var i = 0; i < records.length; i++) {
+    couchDbStore.add(records[i]);
+  }
 }
 
 function addCouchToSendMenu(menu) {
@@ -284,38 +327,50 @@ function addCouchToSendMenu(menu) {
       foldername : 'couchdb',
       id: Ext.id(),
       handler: function() {
+
         // check id of menu to figure out where we're picking records from
-        console.log('handler called from: ' + this + '. saving to ' + this.foldername);
+        if(bibliosdebug) {
+          console.info('handler called from: ' + this + '. saving to ' + this.foldername);
+          console.info(menu);
+        }
         var records = new Array();
         if( menu.id == 'searchgridSendMenu' ){
           searchrecords = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
           for(var i = 0; i < searchrecords.length; i++) {
-            records.push({
-              xml: searchrecords[i].data.fullrecord
-              ,title: searchrecords[i].data.title
-              ,author: searchrecords[i].data.author
-              ,publisher: searchrecords[i].data.publisher
-              ,date: searchrecords[i].data.date
-            });
+            records.push(new Record({
+                  xml: searchrecords[i].data.fullrecord
+                  ,title: searchrecords[i].data.title
+                  ,author: searchrecords[i].data.author
+                  ,publisher: searchrecords[i].data.publisher
+                  ,date: searchrecords[i].data.date
+                })
+            );
           }
         }
         else if( menu.id == 'savegridSendMenu' ) {
           savegridrecords = Ext.getCmp('savegrid').getSelectionModel().getChecked();
           for(var i = 0; i < savegridrecords.length; i++) {
-            records.push(savegridrecords[i].data);
+            records.push(savegridrecords[i]);
           }
         }
         // from editor
         else {
-          console.info(menu.id);
-          records = [{
-            xml: UI.editor[menu.editorid].XMLString()
-            ,title:UI.editor[menu.editorid].getTitle()
-            ,author:UI.editor[menu.editorid].getAuthor()
-            ,publisher: UI.editor[menu.editorid].getPublisher()
-            ,date:UI.editor[menu.editorid].getDate()
-            }
-          ];
+          var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+          if(bibliosdebug) {
+            console.info(menu.id);
+            console.info(editorid);
+          }
+          var r = new Record({
+            xml: UI.editor[editorid].record.XMLString()
+            ,title:UI.editor[editorid].record.getTitle()
+            ,author:UI.editor[editorid].record.getAuthor()
+            ,publisher: UI.editor[editorid].record.getPublisher()
+            ,date:UI.editor[editorid].record.getDate()
+          });
+          if(bibliosdebug) {
+            console.info(r);
+          }
+          records.push(r);
         }
         if(bibliosdebug) {
           console.debug('couchdb: sending recs to couchdb');
