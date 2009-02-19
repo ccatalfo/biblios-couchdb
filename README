@@ -14,4 +14,14 @@ To install, add the following to your biblios configuration file (biblios.xml):
 
 Copy the folder this file is contained in to your biblios/plugins directory, making sure that the path to bibliosCouch.js matches the path referenced in the above configuration file.
 
+You need (obviously) a working couchdb installation.  To set this up for biblios, do the following:
+
+1. Create a new database named "biblios".
+
+2. Create a new view document with name "_design/records" to display all records
+in couchdb.  This view should use this as the "all" view (to return all documents):
+function(doc){emit(null,doc);}
+
+
+
 
