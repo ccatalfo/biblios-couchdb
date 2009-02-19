@@ -1,0 +1,17 @@
+This is a plugin for the biblios (http://biblios.org) metadata editor.  It allows for displaying of records in and saving of records to a couchdb (http://couchdb.apache.org/) database.
+
+To install, add the following to your biblios configuration file (biblios.xml):
+
+<plugin>
+  <name>CouchDb Network</name>
+  <type>externalInterface</type>
+  <file>plugins/bibliosCouch/bibliosCouch.js</file>
+  <initcall></initcall>
+  <enabled>1</enabled>
+  <allowDelete>0</allowDelete>
+  <allowModify>0</allowModify>
+</plugin>
+
+Copy the folder this file is contained in to your biblios/plugins directory, making sure that the path to bibliosCouch.js matches the path referenced in the above configuration file.
+
+
