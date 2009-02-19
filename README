@@ -22,6 +22,17 @@ You need (obviously) a working couchdb installation.  To set this up for biblios
 in couchdb.  This view should use this as the "all" view (to return all documents):
 function(doc){emit(null,doc);}
 
+3. In order to send requests to the couchDB installation, you'll need to setup a proxy like the following (for apache2 in this case):
+
+ ProxyRequests Off
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    ProxyPass /couchdb http://localhost:5984
+    ProxyPassReverse /couchdb http://localhost:5984
+
 
 
 
