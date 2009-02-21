@@ -282,6 +282,7 @@ var bibliosCouchGrid =
                       ,xml:records[i].data.xml
                       ,medium:records[i].data.medium
                       ,location:'couchdb'
+                      ,xmlformat:records[i].data.xmlformat
                       ,Savefiles_id:btn.savefileid
                     }).save();
                     clearStatusMsg();
