@@ -184,21 +184,21 @@ var couchDbStore = new Ext.ux.data.CouchStore({
     fields: [
         {name: '_id'        },  // I'd love to get rid of this as well
         {name: '_rev'       },  // ditto
-        {name: 'title'   },
-        {name: 'author'   },
-        {name: 'publisher'},
+        {name: 'Title'   },
+        {name: 'Author'   },
+        {name: 'Publisher'},
         {name: 'xml'},
           {
-            name: 'dateofpub'
+            name: 'DateOfPub'
           },
       {
         name: 'xmlformat'
       },
       {
-        name: 'location'
+        name: 'Location'
       },
       {
-        name: 'medium'
+        name: 'Medium'
       }
     ]
   }); // CouchStore def
