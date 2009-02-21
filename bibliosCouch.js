@@ -231,7 +231,7 @@ var bibliosCouchGrid =
         }
         ,{
           header:'Medium'
-          ,dataIndex:'medium'
+          ,dataIndex:'Medium'
         }
         ,{
           header:'Format'
@@ -278,12 +278,12 @@ var bibliosCouchGrid =
                     }
                     showStatusMsg('Saving ' + records[i].data.title);
                     var record = new DB.Records({
-                      title : records[i].data.title
-                      ,author: records[i].data.author
-                      ,publisher: records[i].data.publisher
-                      ,date:records[i].data.date
+                      title : records[i].data.Title
+                      ,author: records[i].data.Author
+                      ,publisher: records[i].data.Publisher
+                      ,date:records[i].data.Date
                       ,xml:records[i].data.xml
-                      ,medium:records[i].data.medium
+                      ,medium:records[i].data.Medium
                       ,location:'couchdb'
                       ,xmlformat:records[i].data.xmlformat
                       ,Savefiles_id:btn.savefileid
