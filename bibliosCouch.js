@@ -316,8 +316,10 @@ function sendToCouch(records) {
   });
 */
   for(var i = 0; i < records.length; i++) {
+    showStatusMsg('Sending ' + records[i].data.Title + ' to CouchDB');
     couchDbStore.add(records[i]);
   }
+  clearStatusMsg();
 }
 
 function addCouchToSendMenu(menu) {
