@@ -274,9 +274,9 @@ var bibliosCouchGrid =
                   var records = bibliosCouchGrid.getSelections();
                   for(var i = 0; i < records.length; i++) {
                     if(bibliosdebug) {
-                      console.info('saving ' +records[i].data.title);
+                      console.info('saving ' +records[i].data.Title);
                     }
-                    showStatusMsg('Saving ' + records[i].data.title);
+                    showStatusMsg('Saving ' + records[i].data.Title);
                     var record = new DB.Records({
                       title : records[i].data.Title
                       ,author: records[i].data.Author
