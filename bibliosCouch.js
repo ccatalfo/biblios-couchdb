@@ -187,7 +187,10 @@ var couchDbStore = new Ext.ux.data.CouchStore({
         {name: 'Title'   },
         {name: 'Author'   },
         {name: 'Publisher'},
-        {name: 'xml'},
+      {
+        name: 'Date'
+      }
+      ,{name: 'xml'},
           {
             name: 'DateOfPub'
           },
@@ -212,19 +215,19 @@ var bibliosCouchGrid =
       [
         {
           header:'Title'
-          ,dataIndex:'title'
+          ,dataIndex:'Title'
         }
         ,{
           header:'Author'
-          ,dataIndex:'author'
+          ,dataIndex:'Author'
         }
         ,{
           header:'Publisher'
-          ,dataIndex:'publisher'
+          ,dataIndex:'Publisher'
         }
         ,{
           header:'Date'
-          ,dataIndex:'date'
+          ,dataIndex:'Date'
         }
         ,{
           header:'Medium'
@@ -236,7 +239,7 @@ var bibliosCouchGrid =
         }
         ,{
           header:'Location'
-          ,dataIndex:'location'
+          ,dataIndex:'Location'
         }
       ]
   ,sm: new Ext.grid.RowSelectionModel()
