@@ -341,14 +341,16 @@ function addCouchToSendMenu(menu) {
         if( menu.id == 'searchgridSendMenu' ){
           searchrecords = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
           for(var i = 0; i < searchrecords.length; i++) {
+          var xmlformat = DB.SearchTargets.select('name=?', [searchrecords[i].data.location_name]).getOne().requestsyntax;
             records.push(new Record({
                   xml: searchrecords[i].data.fullrecord
-                  ,title: searchrecords[i].data.title
-                  ,author: searchrecords[i].data.author
-                  ,publisher: searchrecords[i].data.publisher
-                  ,date: searchrecords[i].data.date
-                })
-            );
+                  ,Title: searchrecords[i].data.title
+                  ,Author: searchrecords[i].data.author
+                  ,Publisher: searchrecords[i].data.publisher
+                  ,DateOfPub: searchrecords[i].data.date
+                  ,xmlformat: xmlformat
+                  ,Medium: searchrecords[i].data.medium
+                  }));
           }
         }
         else if( menu.id == 'savegridSendMenu' ) {
@@ -366,10 +368,11 @@ function addCouchToSendMenu(menu) {
           }
           var r = new Record({
             xml: UI.editor[editorid].record.XMLString()
-            ,title:UI.editor[editorid].record.getTitle()
-            ,author:UI.editor[editorid].record.getAuthor()
-            ,publisher: UI.editor[editorid].record.getPublisher()
-            ,date:UI.editor[editorid].record.getDate()
+            ,Title:UI.editor[editorid].record.getTitle()
+            ,Author:UI.editor[editorid].record.getAuthor()
+            ,Publisher: UI.editor[editorid].record.getPublisher()
+            ,DateOfPub:UI.editor[editorid].record.getDate()
+            ,xmlformat:UI.editor[editorid].syntax
           });
           if(bibliosdebug) {
             console.info(r);
